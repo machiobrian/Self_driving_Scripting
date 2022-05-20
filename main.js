@@ -13,7 +13,7 @@ const car = new Car(road.getLaneCenter(3),100,30,50,"KEYS"); //have this vehicle
                                         //controllable
 //car.draw(ctx);
 const traffic = [
-    new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",0.2) //vehilce infront of the ego
+    new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",1) //vehilce infront of the ego
 ];
 // animate motion control
 

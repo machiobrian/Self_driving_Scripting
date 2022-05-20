@@ -9,7 +9,7 @@ class Sensor{
         this.readings=[]; //create an array to detect/how far road boarders are
     }
 
-    update(roadBoarders)
+    update(roadBoarders,traffic)
     {
         this.#castRays();
 
@@ -18,17 +18,23 @@ class Sensor{
         for (let i=0;i<this.rays.length;i++)
         {
             this.readings.push(
-                this.#getReadings(this.rays[i],roadBoarders)
+                this.#getReadings(
+                    this.rays[i],
+                    roadBoarders,
+                    traffic
+                    )
             );
         }
 
     }
 
-    #getReadings(rays,roadBoarders)
+    #getReadings(rays,roadBoarders,traffic)
     {
         //method takes arrays and boarders as params
         //where it touches the boarders
         let touches=[];
+
+
         for(let i=0;i<roadBoarders.length;i++)
         {
             const touch=getIntersection(
@@ -42,6 +48,25 @@ class Sensor{
                 touches.push(touch);
             }
             //if segments don't intersect, don't add anything NULL
+        }
+
+        for(let i=0;i<traffic.length;i++)                                                                                                                                                                                                                                                                                               
+        {
+            //fetch every polygon data with the one loop
+            const poly=traffic[i].polygon;
+            for(let j=0;j<poly.length;j++)
+            {
+                const value=getIntersection(
+                    rays[0],
+                    rays[1],
+                    poly[j],
+                    poly[(j+1)%poly.length]
+                );
+                if(value)
+                {
+                    touches.push(value);
+                }
+            }
         }
 
         for(let i=0;i<traffic.length;i++)
