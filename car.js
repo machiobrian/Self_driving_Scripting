@@ -6,6 +6,7 @@ class Car{
     {
         //store them as attributes; properties, so that the car remembers how big 
         //it is and where it is
+        //new changes
         this.x=x;
         this.y=y;
         this.width=width;
