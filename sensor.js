@@ -43,6 +43,24 @@ class Sensor{
             }
             //if segments don't intersect, don't add anything NULL
         }
+
+        for(let i=0;i<traffic.length;i++)
+        {
+            const poly=traffic[i].polygon;
+            for(let j=0;j<poly.length;j++)
+            {
+                const value=getIntersection(
+                    rays[0],
+                    rays[1],
+                    poly[j],
+                    poly[(j+1)%poly.length]
+                );
+                if(value)
+                {
+                    touches.push(value);
+                }
+            }
+        }
         //if we have absolutely no touches with the given array
         if(touches.length==0)
         {
