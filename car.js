@@ -25,6 +25,11 @@ class Car{
         {
             //if control type is not dummy, then equip with sensor
             this.sensor=new Sensor(this);
+
+            //neural network inclusion
+            this.brain=new NeuralNetwork(
+                [this.sensor.rayCount,6,4] //4 neurons for fwd, rev, lft, rgt
+            );
         }
         
         this.controls=new Controls(controlType); //constructor
@@ -44,7 +49,21 @@ class Car{
 
         if(this.sensor){
             //if the sensor exists, update else, do nothing
-        this.sensor.update(roadBoarders,traffic);
+            this.sensor.update(roadBoarders,traffic);
+
+            //neural networks addition
+            //take out the offsets from the sensor readings
+            const offsets=this.sensor.readings.map(
+                s=>s==null?0:1-s.offset
+                //from each sensor reading s, check if its null and return 0
+                //else retutn 1- sensor offset. -> neurons to receive small values when 
+                // object is far and large values when close
+            );
+
+            const outputs=NeuralNetwork.feedForward(offsets, this.brain);
+            console.log(outputs);   
+
+
         }
     }
 
@@ -69,7 +88,7 @@ class Car{
         }
         return false;
     }
-
+//polygon to define the vehicle dimension and shape
     #createPolygon(){
         const points=[];
         const rad=Math.hypot(this.width,this.height)/2;
