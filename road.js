@@ -1,6 +1,6 @@
 class Road
 {
-    constructor(x,width,laneCount=2) //center it on the x and let it have a width
+    constructor(x,width,laneCount=3) //center it on the x and let it have a width
     {
         //its attributes
         this.x=x;

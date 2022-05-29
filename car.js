@@ -2,7 +2,7 @@ class Car{
 
     //define where we want the car to be x,y
     //define how big the car should be w,h
-    constructor(x,y,width,height,controlType,maxSpeed=7)
+    constructor(x,y,width,height,controlType,maxSpeed=6)
     {
         //store them as attributes; properties, so that the car remembers how big 
         //it is and where it is
@@ -20,6 +20,9 @@ class Car{
         //to correct the right and left improper navigation; brick game like navigation
         this.damaged=false; //all cars are intially not damaged
         this.angle = 0;
+
+        this.useBrain=controlType=="AI"; // new method to induce the brain of the vehicle
+
 
         if(controlType!="DUMMY")
         {
@@ -61,7 +64,15 @@ class Car{
             );
 
             const outputs=NeuralNetwork.feedForward(offsets, this.brain);
-            console.log(outputs);   
+            //console.log(outputs);   
+
+            if(this.useBrain) //if brain is in use 
+            {
+                this.controls.forward=outputs[0]; //the controls of forward will be outputs of 0
+                this.controls.left=outputs[1];
+                this.controls.right=outputs[2];
+                this.controls.reverse=outputs[3];
+            }
 
 
         }
@@ -174,7 +185,7 @@ class Car{
         this.y-=Math.cos(this.angle)*this.speed;
     }
 
-    draw(ctx)
+    draw(ctx,drawSensor=false)
     {
         /* After introducing the Polygon, we remove the instance of drawing the rectangle using
         translations and rotations */
@@ -215,7 +226,7 @@ class Car{
         }
         ctx.fill();
 
-        if(this.sensor){
+        if(this.sensor && drawSensor){
             //if the sensor exists, then draw its rays
         this.sensor.draw(ctx)       
         }
